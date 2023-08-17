@@ -20,10 +20,12 @@ use ApiPlatform\Metadata\GraphQl\Query;
 use ApiPlatform\Metadata\HttpOperation;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 trait LinksHandlerTrait
 {
     private ?ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory;
+    private ?NameConverterInterface $nameConverter;
 
     /**
      * @param array{linkClass?: string, linkProperty?: string}&array<string, mixed> $context
@@ -42,7 +44,8 @@ trait LinksHandlerTrait
         $linkProperty = $context['linkProperty'] ?? null;
 
         foreach ($links as $link) {
-            if ($linkClass === $link->getFromClass() && $linkProperty === $link->getFromProperty()) {
+            $testedProperty = $this->nameConverter ? $this->nameConverter->normalize($link->getFromProperty()) : $link->getFromProperty();
+            if ($linkClass === $link->getFromClass() && $linkProperty === $testedProperty) {
                 $newLink = $link;
                 break;
             }
@@ -76,7 +79,8 @@ trait LinksHandlerTrait
         }
 
         foreach ($this->getOperationLinks($linkedOperation ?? null) as $link) {
-            if ($resourceClass === $link->getToClass() && $linkProperty === $link->getFromProperty()) {
+            $testedProperty = $this->nameConverter ? $this->nameConverter->normalize($link->getFromProperty()) : $link->getFromProperty();
+            if ($resourceClass === $link->getToClass() && $linkProperty === $testedProperty) {
                 $newLink = $link;
                 break;
             }

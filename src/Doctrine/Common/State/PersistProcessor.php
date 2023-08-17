@@ -19,14 +19,16 @@ use ApiPlatform\Metadata\Util\ClassInfoTrait;
 use ApiPlatform\State\ProcessorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager as DoctrineObjectManager;
+use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 final class PersistProcessor implements ProcessorInterface
 {
     use ClassInfoTrait;
     use LinksHandlerTrait;
 
-    public function __construct(private readonly ManagerRegistry $managerRegistry)
+    public function __construct(private readonly ManagerRegistry $managerRegistry, ?NameConverterInterface $nameConverter = null)
     {
+        $this->nameConverter = $nameConverter;
     }
 
     /**
