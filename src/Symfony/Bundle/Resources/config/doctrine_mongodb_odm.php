@@ -57,6 +57,7 @@ return function (ContainerConfigurator $container) {
 
     $services->set('api_platform.doctrine_mongodb.odm.state.persist_processor', PersistProcessor::class)
         ->args([service('doctrine_mongodb')])
+        ->arg('$nameConverter', service('api_platform.name_converter')->ignoreOnInvalid())
         ->tag('api_platform.state_processor', ['priority' => -100, 'key' => 'api_platform.doctrine_mongodb.odm.state.persist_processor'])
         ->tag('api_platform.state_processor', ['priority' => -100, 'key' => 'ApiPlatform\Doctrine\Common\State\PersistProcessor']);
 
@@ -200,6 +201,7 @@ return function (ContainerConfigurator $container) {
             tagged_iterator('api_platform.doctrine_mongodb.odm.aggregation_extension.collection'),
             tagged_locator('api_platform.doctrine.odm.links_handler', 'key'),
         ])
+        ->arg('$nameConverter', service('api_platform.name_converter')->ignoreOnInvalid())
         ->tag('api_platform.state_provider', ['priority' => -100, 'key' => 'ApiPlatform\Doctrine\Odm\State\CollectionProvider'])
         ->tag('api_platform.state_provider', ['priority' => -100, 'key' => 'api_platform.doctrine_mongodb.odm.state.collection_provider']);
 
@@ -212,6 +214,7 @@ return function (ContainerConfigurator $container) {
             tagged_iterator('api_platform.doctrine_mongodb.odm.aggregation_extension.item'),
             tagged_locator('api_platform.doctrine.odm.links_handler', 'key'),
         ])
+        ->arg('$nameConverter', service('api_platform.name_converter')->ignoreOnInvalid())
         ->tag('api_platform.state_provider', ['priority' => -100, 'key' => 'ApiPlatform\Doctrine\Odm\State\ItemProvider'])
         ->tag('api_platform.state_provider', ['priority' => -100, 'key' => 'api_platform.doctrine_mongodb.odm.state.item_provider']);
 

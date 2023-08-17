@@ -25,6 +25,7 @@ use ApiPlatform\State\Util\StateOptionsTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 /**
  * Item state provider using the Doctrine ORM.
@@ -41,11 +42,12 @@ final class ItemProvider implements ProviderInterface
     /**
      * @param QueryItemExtensionInterface[] $itemExtensions
      */
-    public function __construct(ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory, ManagerRegistry $managerRegistry, private readonly iterable $itemExtensions = [], ?ContainerInterface $handleLinksLocator = null)
+    public function __construct(ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory, ManagerRegistry $managerRegistry, private readonly iterable $itemExtensions = [], ?ContainerInterface $handleLinksLocator = null, ?NameConverterInterface $nameConverter = null)
     {
         $this->resourceMetadataCollectionFactory = $resourceMetadataCollectionFactory;
         $this->handleLinksLocator = $handleLinksLocator;
         $this->managerRegistry = $managerRegistry;
+        $this->nameConverter = $nameConverter;
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?object
