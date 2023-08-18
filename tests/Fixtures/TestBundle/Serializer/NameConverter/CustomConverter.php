@@ -31,11 +31,11 @@ class CustomConverter implements NameConverterInterface
 
     public function normalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string
     {
-        return 'nameConverted' === $propertyName ? $this->nameConverter->normalize($propertyName) : $propertyName;
+        return str_ends_with($propertyName, 'Converted') ? $this->nameConverter->normalize($propertyName) : $propertyName;
     }
 
     public function denormalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string
     {
-        return 'name_converted' === $propertyName ? $this->nameConverter->denormalize($propertyName) : $propertyName;
+        return str_ends_with($propertyName, '_converted') ? $this->nameConverter->denormalize($propertyName) : $propertyName;
     }
 }
